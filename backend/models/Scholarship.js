@@ -9,25 +9,46 @@ const scholarshipSchema = new mongoose.Schema(
 
     provider: String,
 
-    state: String,
+    status: {
+      type: String,
+      default: "active",
+    },
 
-    category: String,
+    state: {
+      type: String,
+      default: "All India",
+    },
 
-    course: String,
+    gender: {
+      type: String,
+      default: "Any",
+    },
 
-    gender: String,
+    category: [String],
 
-    incomeLimit: Number,
+    education: [String],
+
+    course: [String],
+
+    occupation: {
+      type: String,
+      default: "Student",
+    },
+
+    incomeLimit: {
+      type: Number,
+      default: 0,
+    },
+
+    ageMin: Number,
+
+    ageMax: Number,
 
     eligibility: String,
 
     benefits: String,
 
     documents: [String],
-
-    applyStart: String,
-
-    applyEnd: String,
 
     officialLink: String,
 

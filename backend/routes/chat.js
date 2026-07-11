@@ -15,8 +15,7 @@ router.post("/", async (req, res) => {
     const profile = extractProfile(message);
 
     // 2. Search Database
-    const result = await universalSearch(message);
-
+    const result = await universalSearch(profile);
     // 3. Eligibility Check
     const checkedSchemes = checkEligibility(message, result.schemes);
 
@@ -33,6 +32,14 @@ router.post("/", async (req, res) => {
     // 6. Sort by Highest Score
     scoredSchemes.sort((a, b) => b.score - a.score);
     scoredScholarships.sort((a, b) => b.score - a.score);
+
+    const finalSchemes = scoredSchemes
+      .filter((item) => item.score >= 50)
+      .slice(0, 5);
+
+    const finalScholarships = scoredScholarships
+      .filter((item) => item.score >= 50)
+      .slice(0, 5);
 
     // 7. AI Prompt
     const prompt = `

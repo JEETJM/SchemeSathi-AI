@@ -12,6 +12,16 @@
   padding: 14px 0;
 }
 
+.customNavbar {
+  height: 90px;
+  padding: 0;
+}
+
+.navbar-logo {
+  height: 85px;
+  width: 95px;
+}
+
 .logo {
   font-size: 28px;
 
@@ -71,3 +81,9 @@
     margin-left: 0;
   }
 }
+
+/* .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+} */

@@ -10,7 +10,7 @@ const schemes = [
     occupation: "Student",
     benefits: "Up to ₹8000 per year",
     documents: ["Aadhaar", "Income Certificate", "Marksheet"],
-    officialLink: "https://svmcm.wbhed.gov.in",
+    officialLink: "https://svmcm.wb.gov.in/",
     keywords: ["student", "engineering", "college", "scholarship"],
   },
 
@@ -30,7 +30,7 @@ const schemes = [
   },
 
   {
-    name: "Lakshmir Bhandar",
+    name: "Annapurna Yojana",
     state: "West Bengal",
     category: "Women",
     description: "Financial support for women.",
@@ -40,7 +40,7 @@ const schemes = [
     occupation: "Any",
     benefits: "Monthly financial assistance",
     documents: ["Aadhaar", "Residence Proof"],
-    officialLink: "https://socialsecurity.wb.gov.in",
+    officialLink: "https://socialregistry.wb.gov.in/",
     keywords: ["women", "financial"],
   },
 ];

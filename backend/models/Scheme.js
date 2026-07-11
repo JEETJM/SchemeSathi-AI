@@ -7,19 +7,49 @@ const schemeSchema = new mongoose.Schema(
       required: true,
     },
 
-    state: String,
+    schemeType: String,
 
-    category: String,
+    status: {
+      type: String,
+      default: "active",
+    },
+
+    state: {
+      type: String,
+      default: "All India",
+    },
+
+    district: {
+      type: String,
+      default: "",
+    },
+
+    gender: {
+      type: String,
+      default: "Any",
+    },
+
+    occupation: {
+      type: String,
+      default: "Any",
+    },
+
+    category: [String],
+
+    education: [String],
+
+    incomeLimit: {
+      type: Number,
+      default: 0,
+    },
+
+    ageMin: Number,
+
+    ageMax: Number,
 
     description: String,
 
     eligibility: String,
-
-    incomeLimit: String,
-
-    gender: String,
-
-    occupation: String,
 
     benefits: String,
 

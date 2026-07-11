@@ -5,7 +5,12 @@ function Navbar() {
     <nav className="navbar navbar-expand-lg customNavbar">
       <div className="container">
         <a className="navbar-brand logo" href="/">
-          SchemeSathi AI
+          <img
+            src="/Media/Images/SchemaAI.jpeg"
+            alt="SchemeSathi AI"
+            className="navbar-logo"
+          />
+          <span>ꜱᴄʜᴇᴍᴇꜱᴀᴛʜɪ ᴀɪ</span>
         </a>
 
         <button

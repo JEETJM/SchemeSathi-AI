@@ -29,7 +29,7 @@ const scholarships = [
     documents: ["Income", "Marksheet"],
     applyStart: "August",
     applyEnd: "November",
-    officialLink: "https://svmcm.wbhed.gov.in",
+    officialLink: "https://svmcm.wb.gov.in/",
     keywords: ["engineering", "wb", "student"],
   },
 
