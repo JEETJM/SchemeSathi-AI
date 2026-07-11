@@ -1,37 +1,58 @@
 import express from "express";
 import { askGemma } from "../services/gemmaService.js";
 import { findSchemes } from "../services/schemeService.js";
+import { checkEligibility } from "../services/eligibilityService.js";
 
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { message } = req.body;
+  try {
+    const { message } = req.body;
 
-  const matched = findSchemes(message);
+    // Find matching schemes
+    const matched = findSchemes(message);
 
-  let prompt = `
+    // Check eligibility
+    const checked = checkEligibility(message, matched);
 
+    const prompt = `
 You are SchemeSathi AI.
 
-User:
+You are an intelligent Government Scheme Assistant.
 
+Rules:
+
+1. Recommend ONLY from the provided schemes.
+2. Never invent any scheme.
+3. Tell the user which schemes are Eligible.
+4. Tell which schemes are Not Eligible.
+5. Explain WHY.
+6. Give next steps.
+7. Reply in beautiful markdown.
+
+User Profile:
 ${message}
 
-Government Schemes:
-
-${JSON.stringify(matched)}
-
-Recommend only from these schemes.
+Schemes:
+${JSON.stringify(checked, null, 2)}
 
 `;
 
-  const reply = await askGemma(prompt);
+    const reply = await askGemma(prompt);
 
-  res.json({
-    reply,
+    res.json({
+      success: true,
+      reply,
+      matched: checked,
+    });
+  } catch (err) {
+    console.error(err);
 
-    matched,
-  });
+    res.status(500).json({
+      success: false,
+      message: "AI Error",
+    });
+  }
 });
 
 export default router;

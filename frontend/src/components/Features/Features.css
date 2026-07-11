@@ -1,0 +1,79 @@
+.featuresSection {
+  padding: 100px 0;
+
+  background: #f8fbff;
+}
+
+.sectionHeading {
+  text-align: center;
+
+  margin-bottom: 70px;
+}
+
+.sectionHeading h2 {
+  font-size: 42px;
+
+  font-weight: 700;
+
+  color: #222;
+
+  margin-bottom: 15px;
+}
+
+.sectionHeading p {
+  font-size: 18px;
+
+  color: #666;
+}
+
+.featureCard {
+  background: white;
+
+  padding: 35px;
+
+  border-radius: 20px;
+
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+
+  height: 100%;
+
+  transition: 0.35s;
+}
+
+.featureCard:hover {
+  transform: translateY(-10px);
+
+  box-shadow: 0 20px 45px rgba(13, 110, 253, 0.18);
+}
+
+.featureIcon {
+  width: 70px;
+
+  height: 70px;
+
+  border-radius: 50%;
+
+  background: #e8f2ff;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  font-size: 34px;
+
+  margin-bottom: 25px;
+}
+
+.featureCard h4 {
+  font-weight: 700;
+
+  margin-bottom: 15px;
+}
+
+.featureCard p {
+  color: #666;
+
+  line-height: 1.7;
+}
