@@ -58,7 +58,7 @@ function ChatBox() {
         rows="5"
         placeholder="Describe yourself...
 Example:
-I am 21 years old male from West Bengal studying B.Tech with family income 2 lakh."
+I am 22 years old male from West Bengal studying B.Tech with family income 2 lakh."
         value={message}
         onChange={(e) => setMessage(e.target.value)}
       ></textarea>
