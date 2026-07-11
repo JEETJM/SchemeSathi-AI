@@ -1,12 +1,17 @@
 import { useState } from "react";
 import API from "../../services/api";
-
+import ChatMessage from "./ChatMessage";
+import Typing from "./Typing";
 function ChatBox() {
   const [message, setMessage] = useState("");
   const [reply, setReply] = useState("");
-  const [schemes, setSchemes] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [schemes, setSchemes] = useState([]);
+  const [scholarships, setScholarships] = useState([]);
+
   const [chatHistory, setChatHistory] = useState([]);
+
   const sendMessage = async () => {
     if (!message.trim()) return;
 
@@ -19,8 +24,13 @@ function ChatBox() {
         message: userMessage,
       });
 
-      setReply(res.data.reply);
-      setSchemes(res.data.matched);
+      console.log(res.data);
+
+      setReply(res.data.reply || "");
+
+      setSchemes(res.data.schemes || []);
+
+      setScholarships(res.data.scholarships || []);
 
       setChatHistory((prev) => [
         ...prev,
@@ -32,114 +42,165 @@ function ChatBox() {
 
       setMessage("");
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      alert("Something went wrong.");
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="container py-5">
-      <div className="row justify-content-center">
-        <div className="col-lg-8">
-          <div className="card shadow-lg border-0">
-            <div className="card-body p-4">
-              <h1 className="text-center mb-3">SchemeSathi AI</h1>
+    <div className="container mt-5">
+      <h2 className="text-center mb-4">SchemeSathi AI</h2>
 
-              <p className="text-center text-muted">
-                Find Government Schemes instantly using AI
-              </p>
+      <textarea
+        className="form-control"
+        rows="5"
+        placeholder="Describe yourself...
+Example:
+I am 21 years old male from West Bengal studying B.Tech with family income 2 lakh."
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      ></textarea>
 
-              <textarea
-                className="form-control"
-                rows="5"
-                placeholder="Example: I am a student from West Bengal..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              ></textarea>
+      <button
+        className="btn btn-primary mt-3"
+        onClick={sendMessage}
+        disabled={loading}
+      >
+        {loading ? "Thinking..." : "Ask AI"}
+      </button>
 
-              <button
-                className="btn btn-primary mt-3 w-100"
-                onClick={sendMessage}
-              >
-                Ask AI
-              </button>
+      <hr />
 
-              {loading && (
-                <div className="text-center mt-4">
-                  <div className="spinner-border text-primary"></div>
+      <h3>🤖 AI Response</h3>
 
-                  <p className="mt-2">Gemma is thinking...</p>
-                </div>
-              )}
+      <div
+        className="border rounded p-3 bg-light"
+        style={{ whiteSpace: "pre-wrap" }}
+      >
+        {reply}
+      </div>
 
-              {!loading && reply && (
-                <>
-                  <hr />
+      <br />
 
-                  <h4>🤖 AI Response</h4>
+      <h3>📋 Recommended Schemes</h3>
 
-                  <div className="alert alert-success">{reply}</div>
-                  <hr />
+      <div className="row">
+        {schemes?.map((scheme, index) => (
+          <div className="col-md-6 mb-4" key={index}>
+            <div className="card shadow h-100">
+              <div className="card-body">
+                <h5>{scheme.name}</h5>
 
-                  <h4 className="mb-3">💬 Chat History</h4>
+                <p>
+                  <strong>Category:</strong> {scheme.category}
+                </p>
 
-                  {chatHistory.map((chat, index) => (
-                    <div key={index} className="mb-4">
-                      <div className="alert alert-primary">
-                        <strong>👤 You</strong>
+                <p>
+                  <strong>State:</strong> {scheme.state}
+                </p>
 
-                        <br />
+                <p>
+                  <strong>Eligibility:</strong> {scheme.eligibility}
+                </p>
 
-                        {chat.user}
-                      </div>
+                <p>
+                  <strong>Eligibility Score:</strong>
+                  <span className="badge bg-success ms-2">{scheme.score}%</span>
+                </p>
 
-                      <div className="alert alert-success">
-                        <strong>🤖 SchemeSathi AI</strong>
+                <strong>Matched Reasons</strong>
 
-                        <br />
-
-                        {chat.ai}
-                      </div>
-                    </div>
+                <ul>
+                  {scheme.reasons?.map((reason, i) => (
+                    <li key={i}>{reason}</li>
                   ))}
+                </ul>
 
-                  <h4 className="mt-4">📋 Recommended Schemes</h4>
-
-                  {schemes.map((scheme, index) => (
-                    <div key={index} className="card mt-3 border-success">
-                      <div className="card-body">
-                        <h5>{scheme.name}</h5>
-
-                        <p>
-                          <b>Category:</b> {scheme.category}
-                        </p>
-
-                        <p>
-                          <b>State:</b> {scheme.state}
-                        </p>
-
-                        <p>
-                          <b>Eligibility:</b> {scheme.eligibility}
-                        </p>
-
-                        <a
-                          href={scheme.link}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="btn btn-success"
-                        >
-                          Visit Official Website
-                        </a>
-                      </div>
-                    </div>
-                  ))}
-                </>
-              )}
+                <a
+                  href={scheme.officialLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-success"
+                >
+                  Visit Website
+                </a>
+              </div>
             </div>
           </div>
-        </div>
+        ))}
       </div>
+
+      <hr />
+
+      <h3>🎓 Recommended Scholarships</h3>
+
+      <div className="row">
+        {scholarships?.map((item, index) => (
+          <div className="col-md-6 mb-4" key={index}>
+            <div className="card shadow h-100">
+              <div className="card-body">
+                <h5>{item.name}</h5>
+
+                <p>
+                  <strong>Provider:</strong> {item.provider}
+                </p>
+
+                <p>
+                  <strong>State:</strong> {item.state}
+                </p>
+
+                <p>
+                  <strong>Benefits:</strong> {item.benefits}
+                </p>
+
+                <p>
+                  <strong>Eligibility Score:</strong>
+                  <span className="badge bg-primary ms-2">{item.score}%</span>
+                </p>
+
+                <strong>Matched Reasons</strong>
+
+                <ul>
+                  {item.reasons?.map((reason, i) => (
+                    <li key={i}>{reason}</li>
+                  ))}
+                </ul>
+
+                <a
+                  href={item.officialLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-warning"
+                >
+                  Apply Now
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <hr />
+
+      <h3>💬 Chat History</h3>
+
+      {chatHistory.map((chat, index) => (
+        <div key={index} className="border rounded p-3 mb-3">
+          <p>
+            <strong>👤 You:</strong>
+            <br />
+            {chat.user}
+          </p>
+
+          <p>
+            <strong>🤖 AI:</strong>
+            <br />
+            {chat.ai}
+          </p>
+        </div>
+      ))}
     </div>
   );
 }

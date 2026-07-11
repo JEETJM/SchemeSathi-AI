@@ -1,46 +1,25 @@
-import schemes from "../data/schemes.js";
+import Scheme from "../models/Scheme.js";
 
-export function findSchemes(message) {
+export async function findSchemes(message) {
+  const query = message.toLowerCase();
 
-  const text = message.toLowerCase();
+  const schemes = await Scheme.find();
 
   return schemes.filter((scheme) => {
+    const text = (
+      scheme.name +
+      " " +
+      scheme.category +
+      " " +
+      scheme.state +
+      " " +
+      scheme.description +
+      " " +
+      scheme.eligibility +
+      " " +
+      scheme.keywords.join(" ")
+    ).toLowerCase();
 
-    // State check
-    if (
-      scheme.state &&
-      !text.includes(scheme.state.toLowerCase())
-    ) {
-      return false;
-    }
-
-    // Gender check
-    if (scheme.gender === "female") {
-
-      if (
-        text.includes("male") ||
-        text.includes("man") ||
-        text.includes("boy")
-      ) {
-        return false;
-      }
-
-    }
-
-    if (scheme.gender === "male") {
-
-      if (
-        text.includes("female") ||
-        text.includes("woman") ||
-        text.includes("girl")
-      ) {
-        return false;
-      }
-
-    }
-
-    return true;
-
+    return query.split(" ").some((word) => text.includes(word));
   });
-
 }

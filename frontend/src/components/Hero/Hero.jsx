@@ -2,69 +2,66 @@ import "./Hero.css";
 
 function Hero() {
   return (
-    <section className="heroSection" id="home">
-      <div className="container">
-        <div className="row align-items-center">
-          <div className="col-lg-6">
-            <span className="heroTag">🇮🇳 Powered by Gemma AI</span>
+    <section className="hero">
 
-            <h1>
-              Discover the Right
-              <span> Government Schemes </span>
-              in Seconds.
-            </h1>
+      <div className="hero-overlay"></div>
 
-            <p>
-              SchemeSathi AI helps every Indian discover government schemes,
-              scholarships, financial benefits and welfare programs using
-              Artificial Intelligence.
-            </p>
+      <div className="container hero-content">
 
-            <div className="heroButtons">
-              <a href="#chat" className="btn btn-primary btn-lg">
-                Try AI
-              </a>
+        <span className="hero-badge">
+          🇮🇳 India's Smart Government AI
+        </span>
 
-              <a
-                href="https://github.com/JEETJM/SchemeSathi-AI"
-                target="_blank"
-                rel="noreferrer"
-                className="btn btn-outline-primary btn-lg ms-3"
-              >
-                GitHub
-              </a>
-            </div>
+        <h1>
+          Discover Government
+          <span> Schemes & Scholarships </span>
+          Instantly
+        </h1>
 
-            <div className="heroStats">
-              <div>
-                <h3>500+</h3>
+        <p>
+          SchemeSathi AI helps citizens find eligible Government
+          Schemes, Scholarships, Financial Assistance,
+          Jobs and Welfare Programs using Artificial Intelligence.
+        </p>
 
-                <span>Schemes</span>
-              </div>
+        <div className="hero-buttons">
 
-              <div>
-                <h3>1000+</h3>
+          <button className="primary-btn">
+            🚀 Ask AI
+          </button>
 
-                <span>Scholarships</span>
-              </div>
+          <button className="secondary-btn">
+            📚 Explore Schemes
+          </button>
 
-              <div>
-                <h3>28</h3>
-
-                <span>States</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-lg-6 text-center">
-            <img
-              src="https://illustrations.popsy.co/amber/artificial-intelligence.svg"
-              className="heroImage img-fluid"
-              alt="AI"
-            />
-          </div>
         </div>
+
+        <div className="hero-stats">
+
+          <div>
+            <h2>10K+</h2>
+            <span>Gov Schemes</span>
+          </div>
+
+          <div>
+            <h2>25K+</h2>
+            <span>Scholarships</span>
+          </div>
+
+          <div>
+            <h2>AI</h2>
+            <span>Eligibility Check</span>
+          </div>
+
+          <div>
+            <h2>28+</h2>
+            <span>States</span>
+          </div>
+
+        </div>
+
       </div>
+
     </section>
   );
 }

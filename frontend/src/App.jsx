@@ -1,28 +1,32 @@
-import Navbar from "./components/Navbar/Navbar";
-import Hero from "./components/Hero/Hero";
-import Features from "./components/Features/Features";
-// import HowItWorks from "./components/HowItWorks/HowItWorks";
-// import Stats from "./components/Stats/Stats";
-import ChatBox from "./components/Chat/ChatBox";
-// import Footer from "./components/Footer/Footer";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+import Admin from "./pages/Admin";
 
 function App() {
   return (
-    <>
-      <Navbar />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
 
-      <Hero />
+        <Route path="/dashboard" element={<Dashboard />} />
 
-      <Features />
+        <Route path="/about" element={<About />} />
 
-      {/* <HowItWorks /> */}
+        <Route path="/contact" element={<Contact />} />
 
-      {/* <Stats /> */}
+        <Route path="/login" element={<Login />} />
 
-      <ChatBox />
+        <Route path="/profile" element={<Profile />} />
 
-      {/* <Footer /> */}
-    </>
+        <Route path="/admin" element={<Admin />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
