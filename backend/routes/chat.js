@@ -56,17 +56,17 @@ ${JSON.stringify(scoredSchemes, null, 2)}
 Scholarships:
 ${JSON.stringify(scoredScholarships, null, 2)}
 
-Rules:
+IMPORTANT RULES
 
-1. Recommend ONLY from the provided database.
-2. Never invent any government scheme.
-3. Explain WHY the user is eligible.
-4. Mention Eligibility Score.
-5. Mention Benefits.
-6. Mention Required Documents if available.
-7. Mention Official Website.
-8. If no schemes are available, politely say so.
+1. Recommend ONLY from the database below.
+2. Never invent any Government Scheme.
+3. Never invent any Scholarship.
+4. Never generate any website.
+5. If nothing matches, say "No matching scheme found."
+6. Explain only the provided schemes.
+7. Do not modify scheme names.
 
+You are SchemeSathi AI.
 User Query:
 ${message}
 `;
@@ -81,6 +81,14 @@ ${message}
       reply,
       schemes: scoredSchemes,
       scholarships: scoredScholarships,
+    });
+
+    res.json({
+      success: true,
+      profile,
+      reply,
+      schemes: finalSchemes,
+      scholarships: finalScholarships,
     });
   } catch (err) {
     console.error(err);
