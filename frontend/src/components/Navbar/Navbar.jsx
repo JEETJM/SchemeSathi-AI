@@ -3,9 +3,7 @@ import "./Navbar.css";
 function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg customNavbar">
-
       <div className="container">
-
         <a className="navbar-brand logo" href="/">
           SchemeSathi AI
         </a>
@@ -20,9 +18,7 @@ function Navbar() {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarNav">
-
           <ul className="navbar-nav ms-auto align-items-lg-center">
-
             <li className="nav-item">
               <a href="#home" className="nav-link">
                 Home
@@ -48,6 +44,18 @@ function Navbar() {
             </li>
 
             <li className="nav-item">
+              <a href="/login" className="nav-link">
+                Login
+              </a>
+            </li>
+
+            <li className="nav-item">
+              <a href="/register" className="nav-link">
+                Register
+              </a>
+            </li>
+
+            <li className="nav-item">
               <a
                 href="https://github.com/JEETJM/SchemeSathi-AI"
                 target="_blank"
@@ -57,13 +65,9 @@ function Navbar() {
                 GitHub
               </a>
             </li>
-
           </ul>
-
         </div>
-
       </div>
-
     </nav>
   );
 }

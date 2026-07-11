@@ -1,0 +1,46 @@
+.recommendationCard {
+  background: white;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.recommendItem {
+  padding: 18px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.recommendItem:last-child {
+  border-bottom: none;
+}
+
+.recommendItem h4 {
+  margin-bottom: 6px;
+}
+
+.recommendItem p {
+  color: #666;
+  font-size: 14px;
+}
+
+.recommendFooter {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.score {
+  background: #dbeafe;
+  color: #2563eb;
+  padding: 6px 12px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.recommendFooter a {
+  text-decoration: none;
+  font-weight: 600;
+  color: #16a34a;
+}

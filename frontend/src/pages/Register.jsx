@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { useAuth } from "../context/AuthContext";
-import "./Login.css";
+import "./Register.css";
 
-function Login() {
+function Register() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const [form, setForm] = useState({
+    fullName: "",
     email: "",
     password: "",
   });
@@ -28,26 +29,35 @@ function Login() {
     setLoading(true);
 
     try {
-      const res = await API.post("/auth/login", form);
+      const res = await API.post("/auth/register", form);
 
       login(res.data.token, res.data.user);
 
       navigate("/dashboard");
     } catch (err) {
-      alert(err.response?.data?.message || "Login Failed");
+      alert(err.response?.data?.message || "Registration Failed");
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
+    <div className="register-page">
+      <div className="register-card">
         <h1>SchemeSathi AI 🇮🇳</h1>
 
-        <h2>Welcome Back</h2>
+        <h2>Create Account</h2>
 
         <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="fullName"
+            placeholder="Full Name"
+            value={form.fullName}
+            onChange={handleChange}
+            required
+          />
+
           <input
             type="email"
             name="email"
@@ -67,17 +77,17 @@ function Login() {
           />
 
           <button disabled={loading}>
-            {loading ? "Please Wait..." : "Login"}
+            {loading ? "Creating..." : "Register"}
           </button>
         </form>
 
         <p>
-          Don't have an account?
-          <Link to="/register">Register</Link>
+          Already have an account?
+          <Link to="/login"> Login</Link>
         </p>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default Register;

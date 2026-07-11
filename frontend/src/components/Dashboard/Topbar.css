@@ -1,0 +1,35 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.topbar h2 {
+  margin: 0;
+}
+
+.topbar p {
+  color: gray;
+  margin-top: 5px;
+}
+
+.topbarRight {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.topbarRight input {
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  width: 260px;
+}
+
+.topbarRight img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+}
