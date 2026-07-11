@@ -1,10 +1,18 @@
+// import express from "express";
+// import cors from "cors";
+// import dotenv from "dotenv";
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
+// dotenv.config();
+// console.log("ENV TEST:", process.env.CLOUD_NAME);
+// console.log("Current Directory:", process.cwd());
+
 import authRoute from "./routes/auth.js";
 import dashboardRoute from "./routes/dashboard.js";
 import recommendationRoute from "./routes/recommendation.js";
-dotenv.config();
 
 import { connectDB } from "./config/mongo.js";
 import chatRoute from "./routes/chat.js";
@@ -33,3 +41,7 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`✅ Server Started on Port ${PORT}`);
 });
+
+
+
+

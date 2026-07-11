@@ -1,35 +1,23 @@
 .dashboard{
 display:flex;
-background:#f5f7fb;
 min-height:100vh;
+background:#f5f7fb;
 }
 
-.dashboardMain{
+.dashboardContent{
 flex:1;
-padding:35px;
 margin-left:260px;
 }
 
-.dashboardGrid{
-display:grid;
-grid-template-columns:1fr 2fr;
-gap:25px;
-margin-top:25px;
+.dashboardBody{
+padding:30px;
 }
 
-@media(max-width:1000px){
+@media(max-width:991px){
 
-.dashboardMain{
+.dashboardContent{
 
 margin-left:0;
-
-padding:20px;
-
-}
-
-.dashboardGrid{
-
-grid-template-columns:1fr;
 
 }
 

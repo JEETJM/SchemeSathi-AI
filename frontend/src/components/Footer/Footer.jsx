@@ -34,7 +34,7 @@ function Footer() {
       <hr />
 
       <p className="copyright">
-        © 2026 SchemeSathi AI | Built for Smart India Hackathon 🇮🇳
+        © 2026 SchemeSathi AI | Built for  Hackathon 🇮🇳
       </p>
     </footer>
   );
