@@ -1,7 +1,7 @@
 import "./Sidebar.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
 import {
+  House,
   LayoutDashboard,
   Bot,
   User,
@@ -18,11 +18,15 @@ function Sidebar() {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
-    navigate("/login");
+    navigate("/");
   };
 
   const menu = [
+    {
+      title: "Home",
+      icon: <House size={19} />,
+      path: "/",
+    },
     {
       title: "Dashboard",
       icon: <LayoutDashboard size={19} />,
@@ -31,7 +35,7 @@ function Sidebar() {
     {
       title: "AI Chat",
       icon: <Bot size={19} />,
-      path: "/dashboard/chat",
+      path: "/chat",
     },
     {
       title: "Profile",
@@ -58,10 +62,10 @@ function Sidebar() {
   return (
     <aside className="sidebar">
       <div>
-        <h2 className="sidebarLogo">
+        <div className="sidebarLogo">
           🇮🇳
           <span>SchemeSathi AI</span>
-        </h2>
+        </div>
 
         <ul className="sidebarMenu">
           {menu.map((item) => (
@@ -75,7 +79,6 @@ function Sidebar() {
                 }
               >
                 {item.icon}
-
                 <span>{item.title}</span>
               </Link>
             </li>

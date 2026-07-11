@@ -3,9 +3,6 @@ import "./DashboardLayout.css";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import StatsCards from "./StatsCards";
-import ProfileCard from "./ProfileCard";
-import RecommendationCards from "./RecommendationCards";
-import RecentActivity from "./RecentActivity";
 
 function DashboardLayout() {
   return (
@@ -15,15 +12,9 @@ function DashboardLayout() {
       <main className="dashboardMain">
         <Topbar />
 
-        <StatsCards />
-
-        <div className="dashboardGrid">
-          <ProfileCard />
-
-          <RecommendationCards />
+        <div className="dashboardContent">
+          <StatsCards />
         </div>
-
-        <RecentActivity />
       </main>
     </div>
   );

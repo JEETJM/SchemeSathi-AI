@@ -1,73 +1,91 @@
 import "./StatsCards.css";
-import { useEffect, useState } from "react";
-import API from "../../services/api";
 
 function StatsCards() {
-  const [stats, setStats] = useState({
-    totalSchemes: 0,
-    totalScholarships: 0,
-    saved: 0,
-    chats: 0,
-    profileScore: 0,
-  });
-
-  useEffect(() => {
-    const loadStats = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        const res = await API.get("/dashboard", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setStats(res.data.stats);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    loadStats();
-  }, []);
-
-  const cards = [
-    {
-      title: "Eligible Schemes",
-      value: stats.totalSchemes,
-      color: "#2563eb",
-    },
-    {
-      title: "Scholarships",
-      value: stats.totalScholarships,
-      color: "#16a34a",
-    },
-    {
-      title: "Saved",
-      value: stats.saved,
-      color: "#dc2626",
-    },
-    {
-      title: "Profile Score",
-      value: `${stats.profileScore}%`,
-      color: "#f59e0b",
-    },
-  ];
-
   return (
-    <div className="statsGrid">
-      {cards.map((card, index) => (
-        <div
-          key={index}
-          className="statsCard"
-          style={{ borderTop: `5px solid ${card.color}` }}
-        >
-          <h2>{card.value}</h2>
-
-          <p>{card.title}</p>
+    <>
+      <div className="statsGrid">
+        <div className="statsCard">
+          <h2>3</h2>
+          <p>Eligible Schemes</p>
         </div>
-      ))}
-    </div>
+
+        <div className="statsCard">
+          <h2>5</h2>
+          <p>Scholarships</p>
+        </div>
+
+        <div className="statsCard">
+          <h2>0</h2>
+          <p>Saved</p>
+        </div>
+
+        <div className="statsCard">
+          <h2>0%</h2>
+          <p>Profile Score</p>
+        </div>
+      </div>
+
+      <div
+        style={{
+          marginTop: "35px",
+          background: "#fff",
+          padding: "25px",
+          borderRadius: "18px",
+          boxShadow: "0 5px 20px rgba(0,0,0,.08)",
+        }}
+      >
+        <h3>🤖 AI Recommendations</h3>
+
+        <div style={{ marginTop: "20px" }}>
+          <div
+            style={{
+              border: "1px solid #eee",
+              padding: "18px",
+              borderRadius: "12px",
+              marginBottom: "15px",
+            }}
+          >
+            <h5>Swami Vivekananda Merit-cum-Means Scholarship</h5>
+
+            <p>Scholarship for eligible students in West Bengal.</p>
+
+            <span
+              style={{
+                background: "#22c55e",
+                color: "#fff",
+                padding: "6px 12px",
+                borderRadius: "8px",
+              }}
+            >
+              ⭐ 90% Match
+            </span>
+          </div>
+
+          <div
+            style={{
+              border: "1px solid #eee",
+              padding: "18px",
+              borderRadius: "12px",
+            }}
+          >
+            <h5>PM Kisan</h5>
+
+            <p>Income support scheme for farmers.</p>
+
+            <span
+              style={{
+                background: "#2563eb",
+                color: "#fff",
+                padding: "6px 12px",
+                borderRadius: "8px",
+              }}
+            >
+              ⭐ 88% Match
+            </span>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

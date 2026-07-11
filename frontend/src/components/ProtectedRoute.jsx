@@ -5,11 +5,23 @@ function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <h2>Loading...</h2>;
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "grid",
+          placeItems: "center",
+          fontSize: "22px",
+          fontWeight: "600",
+        }}
+      >
+        Loading...
+      </div>
+    );
   }
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   return children;

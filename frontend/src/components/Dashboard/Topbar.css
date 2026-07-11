@@ -1,35 +1,157 @@
 .topbar {
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
-  margin-bottom: 30px;
+
+  padding: 25px 35px;
+
+  background: white;
+
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 50;
 }
 
 .topbar h2 {
+  font-size: 28px;
+
+  font-weight: 700;
+
   margin: 0;
 }
 
 .topbar p {
-  color: gray;
   margin-top: 5px;
+
+  color: #666;
 }
 
 .topbarRight {
   display: flex;
+
   align-items: center;
-  gap: 20px;
+
+  gap: 18px;
 }
 
-.topbarRight input {
-  padding: 12px 18px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  width: 260px;
+.searchBox {
+  display: flex;
+
+  align-items: center;
+
+  background: #f4f7fb;
+
+  padding: 10px 18px;
+
+  border-radius: 40px;
+
+  width: 320px;
 }
 
-.topbarRight img {
-  width: 45px;
-  height: 45px;
+.searchBox input {
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  margin-left: 10px;
+
+  width: 100%;
+}
+
+.notificationBtn {
+  width: 48px;
+
+  height: 48px;
+
+  border: none;
+
   border-radius: 50%;
+
+  background: #2563eb;
+
+  color: white;
+
+  position: relative;
+
   cursor: pointer;
+}
+
+.notificationBtn span {
+  position: absolute;
+
+  top: -5px;
+
+  right: -4px;
+
+  background: red;
+
+  color: white;
+
+  font-size: 12px;
+
+  width: 20px;
+
+  height: 20px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.profileMini {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  cursor: pointer;
+}
+
+.profileMini img {
+  width: 52px;
+
+  height: 52px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  border: 3px solid #2563eb;
+}
+
+.profileMini h4 {
+  margin: 0;
+
+  font-size: 16px;
+}
+
+.profileMini p {
+  margin: 0;
+
+  font-size: 13px;
+
+  color: #666;
+}
+
+@media (max-width: 900px) {
+  .searchBox {
+    display: none;
+  }
+
+  .topbar {
+    padding: 18px;
+  }
 }
