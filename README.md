@@ -214,21 +214,6 @@ Personalized Recommendations
 
 ---
 
-# 📸 Screenshots
-
-Add your screenshots here:
-
-## Home Page
-
-![Home](screenshots/home.png)
-
-## AI Chat Interface
-
-![Chat](screenshots/chat.png)
-
-## Scheme Recommendation
-
-![Recommendation](screenshots/result.png)
 
 ---
 
@@ -237,7 +222,7 @@ Add your screenshots here:
 ## Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/SchemeSathi-AI.git
+git clone https://github.com/JEETJM/SchemeSathi-AI.git
 ```
 
 ## Frontend Setup
