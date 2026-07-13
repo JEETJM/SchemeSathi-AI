@@ -1,5 +1,9 @@
+console.log("🔥 PROFILE EXTRACTOR LOADED");
+
+const normalize = (text = "") => text.toLowerCase();
+
 export function extractProfile(message) {
-  const text = message.toLowerCase();
+  const text = normalize(message);
 
   const profile = {
     age: null,
@@ -13,137 +17,56 @@ export function extractProfile(message) {
     course: null,
   };
 
-  // =====================
+  // ==========================
   // AGE
-  // =====================
-  const ageMatch = text.match(/\b(\d{1,2})\b/);
+  // ==========================
+
+  let ageMatch =
+    text.match(/(\d{1,2})\s*(years?|yrs?)\s*old/) ||
+    text.match(/age\s*(is)?\s*(\d{1,2})/) ||
+    text.match(/\b(\d{1,2})\b/);
 
   if (ageMatch) {
-    const age = Number(ageMatch[1]);
+    const age = Number(ageMatch[1] || ageMatch[2]);
 
     if (age >= 15 && age <= 100) {
       profile.age = age;
     }
   }
 
-  // =====================
+  // ==========================
   // GENDER
-  // =====================
+  // ==========================
 
-  if (
-    text.includes("male") ||
-    text.includes("boy") ||
-    text.includes("man") ||
-    text.includes("gentleman")
-  ) {
+  if (/\b(male|boy|man)\b/.test(text)) {
     profile.gender = "Male";
   }
 
-  if (
-    text.includes("female") ||
-    text.includes("girl") ||
-    text.includes("woman") ||
-    text.includes("lady")
-  ) {
+  if (/\b(female|girl|woman)\b/.test(text)) {
     profile.gender = "Female";
   }
 
-  // =====================
-  // OCCUPATION
-  // =====================
-
-  if (
-    text.includes("student") ||
-    text.includes("college") ||
-    text.includes("school") ||
-    text.includes("university")
-  ) {
-    profile.occupation = "Student";
-  }
-
-  if (text.includes("farmer") || text.includes("agriculture")) {
-    profile.occupation = "Farmer";
-  }
-
-  if (
-    text.includes("business") ||
-    text.includes("shop") ||
-    text.includes("startup")
-  ) {
-    profile.occupation = "Business";
-  }
-
-  if (
-    text.includes("employee") ||
-    text.includes("job") ||
-    text.includes("private job") ||
-    text.includes("government employee")
-  ) {
-    profile.occupation = "Employee";
-  }
-
-  if (text.includes("unemployed")) {
-    profile.occupation = "Unemployed";
-  }
-
-  // =====================
-  // EDUCATION
-  // =====================
-
-  if (text.includes("b.tech") || text.includes("btech")) {
-    profile.education = "B.Tech";
-    profile.course = "Engineering";
-  }
-
-  if (text.includes("diploma")) {
-    profile.education = "Diploma";
-  }
-
-  if (text.includes("graduation") || text.includes("graduate")) {
-    profile.education = "Graduation";
-  }
-
-  if (text.includes("post graduation") || text.includes("masters")) {
-    profile.education = "Post Graduation";
-  }
-
-  // =====================
-  // CATEGORY
-  // =====================
-
-  if (text.includes("obc-a")) profile.category = "OBC-A";
-  else if (text.includes("obc-b")) profile.category = "OBC-B";
-  else if (text.includes("obc")) profile.category = "OBC";
-  else if (text.includes("sc")) profile.category = "SC";
-  else if (text.includes("st")) profile.category = "ST";
-  else if (text.includes("ews")) profile.category = "EWS";
-  else if (text.includes("general")) profile.category = "General";
-
-  // =====================
-  // STATES
-  // =====================
+  // ==========================
+  // STATE
+  // ==========================
 
   const states = [
     "West Bengal",
     "Bihar",
     "Jharkhand",
     "Odisha",
+    "Delhi",
     "Assam",
     "Tripura",
-    "Delhi",
-    "Maharashtra",
-    "Karnataka",
-    "Tamil Nadu",
     "Kerala",
+    "Tamil Nadu",
+    "Karnataka",
     "Gujarat",
-    "Rajasthan",
     "Punjab",
-    "Haryana",
+    "Rajasthan",
+    "Maharashtra",
     "Uttar Pradesh",
     "Madhya Pradesh",
-    "Chhattisgarh",
-    "Telangana",
-    "Andhra Pradesh",
   ];
 
   for (const state of states) {
@@ -153,27 +76,109 @@ export function extractProfile(message) {
     }
   }
 
-  // =====================
+  if (text.includes("wb")) {
+    profile.state = "West Bengal";
+  }
+
+  // ==========================
+  // CATEGORY
+  // ==========================
+
+  if (text.includes("obc-a")) profile.category = "OBC-A";
+  else if (text.includes("obc-b")) profile.category = "OBC-B";
+  else if (text.includes("obc")) profile.category = "OBC";
+  else if (text.includes("sc")) profile.category = "SC";
+  else if (text.includes("st")) profile.category = "ST";
+  else if (text.includes("ews")) profile.category = "EWS";
+  else if (text.includes("general")) profile.category = "General";
+
+  // ==========================
+  // EDUCATION
+  // ==========================
+
+  if (
+    text.includes("b.tech") ||
+    text.includes("btech") ||
+    text.includes("b.e") ||
+    text.includes("be") ||
+    text.includes("engineering") ||
+    text.includes("bachelor of technology")
+  ) {
+    profile.education = "Engineering";
+    profile.course = "Engineering";
+    profile.occupation = "Student";
+  } else if (text.includes("diploma")) {
+    profile.education = "Diploma";
+    profile.course = "Diploma";
+    profile.occupation = "Student";
+  } else if (text.includes("ug") || text.includes("undergraduate")) {
+    profile.education = "UG";
+    profile.occupation = "Student";
+  } else if (text.includes("pg") || text.includes("post graduate")) {
+    profile.education = "PG";
+    profile.occupation = "Student";
+  } else if (text.includes("12th") || text.includes("hs")) {
+    profile.education = "HS";
+  } else if (text.includes("10th") || text.includes("madhyamik")) {
+    profile.education = "Secondary";
+  }
+
+  if (text.includes("student")) {
+    profile.occupation = "Student";
+  }
+
+  // ==========================
+  // OCCUPATION
+  // ==========================
+
+  if (text.includes("farmer")) {
+    profile.occupation = "Farmer";
+  }
+
+  if (text.includes("business")) {
+    profile.occupation = "Business";
+  }
+
+  if (text.includes("employee") || text.includes("job")) {
+    profile.occupation = "Employee";
+  }
+
+  if (text.includes("labour")) {
+    profile.occupation = "Labour";
+  }
+
+  if (text.includes("unemployed")) {
+    profile.occupation = "Unemployed";
+  }
+
+  // ==========================
   // INCOME
-  // =====================
+  // ==========================
 
-  let incomeMatch = text.match(/(\d+(\.\d+)?)\s*lakh/);
+  let income = text.match(/(\d+(?:\.\d+)?)\s*lakh/);
 
-  if (incomeMatch) {
-    profile.income = Number(incomeMatch[1]) * 100000;
+  if (income) {
+    profile.income = Math.round(Number(income[1]) * 100000);
   }
 
-  incomeMatch = text.match(/₹?\s?(\d+)\s*rs/);
+  if (!profile.income) {
+    income = text.match(/(family income|income)\s*(is|=)?\s*₹?\s*([\d,]+)/);
 
-  if (!profile.income && incomeMatch) {
-    profile.income = Number(incomeMatch[1]);
+    if (income) {
+      profile.income = Number(income[3].replace(/,/g, ""));
+    }
   }
 
-  incomeMatch = text.match(/income\s*(is|=)?\s*(\d+)/);
+  if (!profile.income) {
+    income = text.match(/₹\s*([\d,]+)/);
 
-  if (!profile.income && incomeMatch) {
-    profile.income = Number(incomeMatch[2]);
+    if (income) {
+      profile.income = Number(income[1].replace(/,/g, ""));
+    }
   }
+
+  console.log("========== EXTRACTED PROFILE ==========");
+  console.log(profile);
 
   return profile;
 }

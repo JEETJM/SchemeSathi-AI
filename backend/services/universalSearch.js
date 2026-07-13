@@ -1,134 +1,183 @@
 import Scheme from "../models/Scheme.js";
 import Scholarship from "../models/Scholarship.js";
 
+const normalize = (value) =>
+  String(value || "")
+    .trim()
+    .toLowerCase();
+
+function matchValue(dbValue, userValue, anyWord = "any") {
+  if (!userValue) return true;
+  if (!dbValue) return true;
+
+  // DATABASE VALUE ARRAY
+  if (Array.isArray(dbValue)) {
+    if (dbValue.length === 0) return true;
+
+    return dbValue.some((item) => {
+      const val = normalize(item);
+
+      return (
+        val === normalize(userValue) ||
+        val === "all" ||
+        val === normalize(anyWord) ||
+        val.includes(normalize(userValue)) ||
+        normalize(userValue).includes(val)
+      );
+    });
+  }
+
+  // DATABASE VALUE STRING
+
+  const db = normalize(dbValue);
+  const user = normalize(userValue);
+
+  return (
+    db === "all" ||
+    db === normalize(anyWord) ||
+    db === user ||
+    db.includes(user) ||
+    user.includes(db)
+  );
+}
+
 export async function universalSearch(profile) {
-  // Only active records
-  const schemes = await Scheme.find({ status: "active" });
-  const scholarships = await Scholarship.find({ status: "active" });
+  const schemes = await Scheme.find({
+    status: { $regex: /^active$/i },
+  });
+
+  const scholarships = await Scholarship.find({
+    status: { $regex: /^active$/i },
+  });
+
+  console.log("\n===============================");
+  console.log("PROFILE");
+  console.log(profile);
+
+  console.log("TOTAL SCHEMES:", schemes.length);
+  console.log("TOTAL SCHOLARSHIPS:", scholarships.length);
+
+  // ===============================
+  // SCHEMES
+  // ===============================
 
   const matchedSchemes = schemes.filter((item) => {
-    // ---------- State ----------
     if (
-      item.state &&
-      item.state !== "All India" &&
       profile.state &&
-      item.state.toLowerCase() !== profile.state.toLowerCase()
+      normalize(item.state) !== "all india" &&
+      !matchValue(item.state, profile.state)
     ) {
       return false;
     }
 
-    // ---------- Gender ----------
-    if (
-      item.gender &&
-      item.gender !== "Any" &&
-      profile.gender &&
-      item.gender.toLowerCase() !== profile.gender.toLowerCase()
-    ) {
+    if (!matchValue(item.gender, profile.gender)) {
       return false;
     }
 
-    // ---------- Occupation ----------
-    if (
-      item.occupation &&
-      item.occupation !== "Any" &&
-      profile.occupation &&
-      item.occupation.toLowerCase() !== profile.occupation.toLowerCase()
-    ) {
+    if (!matchValue(item.occupation, profile.occupation)) {
       return false;
     }
 
-    // ---------- Income ----------
+    if (!matchValue(item.category, profile.category, "all")) {
+      return false;
+    }
+
+    if (!matchValue(item.education, profile.education)) {
+      return false;
+    }
+
+    if (!matchValue(item.course, profile.course)) {
+      return false;
+    }
+
+    if (profile.age && item.ageMin && profile.age < Number(item.ageMin)) {
+      return false;
+    }
+
+    if (profile.age && item.ageMax && profile.age > Number(item.ageMax)) {
+      return false;
+    }
+
     if (
-      item.incomeLimit > 0 &&
       profile.income &&
-      profile.income > item.incomeLimit
-    ) {
-      return false;
-    }
-
-    // ---------- Category ----------
-    if (
-      item.category &&
-      item.category.length &&
-      !item.category.includes("All") &&
-      profile.category &&
-      !item.category.includes(profile.category)
-    ) {
-      return false;
-    }
-
-    // ---------- Age ----------
-    if (profile.age) {
-      if (item.ageMin && profile.age < item.ageMin) return false;
-      if (item.ageMax && profile.age > item.ageMax) return false;
-    }
-
-    // ---------- Education ----------
-    if (
-      item.education &&
-      item.education.length &&
-      profile.education &&
-      !item.education.includes(profile.education)
+      item.incomeLimit &&
+      Number(item.incomeLimit) > 0 &&
+      profile.income > Number(item.incomeLimit)
     ) {
       return false;
     }
 
     return true;
   });
+
+  // ===============================
+  // SCHOLARSHIPS
+  // ===============================
 
   const matchedScholarships = scholarships.filter((item) => {
     if (
-      item.state &&
-      item.state !== "All India" &&
       profile.state &&
-      item.state.toLowerCase() !== profile.state.toLowerCase()
+      normalize(item.state) !== "all india" &&
+      !matchValue(item.state, profile.state)
     ) {
       return false;
     }
 
-    if (
-      item.gender &&
-      item.gender !== "Any" &&
-      profile.gender &&
-      item.gender.toLowerCase() !== profile.gender.toLowerCase()
-    ) {
+    if (!matchValue(item.gender, profile.gender)) {
+      return false;
+    }
+
+    if (!matchValue(item.occupation, profile.occupation)) {
+      return false;
+    }
+
+    if (!matchValue(item.category, profile.category, "all")) {
+      return false;
+    }
+
+    if (!matchValue(item.education, profile.education)) {
+      return false;
+    }
+
+    if (!matchValue(item.course, profile.course)) {
+      return false;
+    }
+
+    if (profile.age && item.ageMin && profile.age < Number(item.ageMin)) {
+      return false;
+    }
+
+    if (profile.age && item.ageMax && profile.age > Number(item.ageMax)) {
       return false;
     }
 
     if (
-      item.incomeLimit > 0 &&
       profile.income &&
-      profile.income > item.incomeLimit
+      item.incomeLimit &&
+      Number(item.incomeLimit) > 0 &&
+      profile.income > Number(item.incomeLimit)
     ) {
       return false;
-    }
-
-    if (
-      item.category &&
-      item.category.length &&
-      !item.category.includes("All") &&
-      profile.category &&
-      !item.category.includes(profile.category)
-    ) {
-      return false;
-    }
-
-    if (
-      item.education &&
-      item.education.length &&
-      profile.education &&
-      !item.education.includes(profile.education)
-    ) {
-      return false;
-    }
-
-    if (profile.age) {
-      if (item.ageMin && profile.age < item.ageMin) return false;
-      if (item.ageMax && profile.age > item.ageMax) return false;
     }
 
     return true;
   });
+
+  console.log("\n===============================");
+  console.log("MATCHED SCHEMES");
+
+  matchedSchemes.forEach((x) => {
+    console.log("✅", x.name);
+  });
+
+  console.log("\nMATCHED SCHOLARSHIPS");
+
+  matchedScholarships.forEach((x) => {
+    console.log("🎓", x.name);
+  });
+
+  console.log("\nTOTAL MATCHED SCHEMES:", matchedSchemes.length);
+  console.log("TOTAL MATCHED SCHOLARSHIPS:", matchedScholarships.length);
 
   return {
     schemes: matchedSchemes,

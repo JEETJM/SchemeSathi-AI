@@ -1,9 +1,11 @@
 import express from "express";
+
 import { askGemma } from "../services/gemmaService.js";
 import { universalSearch } from "../services/universalSearch.js";
 import { checkEligibility } from "../services/eligibilityService.js";
 import { calculateScore } from "../services/scoreService.js";
 import { extractProfile } from "../services/profileExtractor.js";
+import { generateResponse } from "../services/responseGenerator.js";
 
 const router = express.Router();
 
@@ -11,79 +13,177 @@ router.post("/", async (req, res) => {
   try {
     const { message } = req.body;
 
-    // 1. Extract User Profile
+    if (!message || !message.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Message is required",
+      });
+    }
+
+    console.log("\n======================================");
+    console.log("USER MESSAGE");
+    console.log(message);
+
+    // ======================================
+    // PROFILE
+    // ======================================
+
     const profile = extractProfile(message);
 
-    // 2. Search Database
+    console.log("\nPROFILE");
+    console.log(profile);
+
+    // ======================================
+    // SEARCH DATABASE
+    // ======================================
+
     const result = await universalSearch(profile);
-    // 3. Eligibility Check
-    const checkedSchemes = checkEligibility(message, result.schemes);
 
-    // 4. Calculate Score for Schemes
-    const scoredSchemes = checkedSchemes.map((item) =>
-      calculateScore(profile, item),
+    console.log("\nFOUND SCHEMES :", result.schemes.length);
+    console.log("FOUND SCHOLARSHIPS :", result.scholarships.length);
+
+    // ======================================
+    // ELIGIBILITY
+    // ======================================
+
+    const eligibleSchemes = checkEligibility(profile, result.schemes).filter(
+      (x) => x.eligible,
     );
 
-    // 5. Calculate Score for Scholarships
-    const scoredScholarships = result.scholarships.map((item) =>
-      calculateScore(profile, item),
-    );
+    const eligibleScholarships = checkEligibility(
+      profile,
+      result.scholarships,
+    ).filter((x) => x.eligible);
 
-    // 6. Sort by Highest Score
-    scoredSchemes.sort((a, b) => b.score - a.score);
-    scoredScholarships.sort((a, b) => b.score - a.score);
+    console.log("ELIGIBLE SCHEMES :", eligibleSchemes.length);
+    console.log("ELIGIBLE SCHOLARSHIPS :", eligibleScholarships.length);
 
-    const finalSchemes = scoredSchemes
-      .filter((item) => item.score >= 50)
+    // ======================================
+    // SCORE
+    // ======================================
+
+    const finalSchemes = eligibleSchemes
+      .map((item) => calculateScore(profile, item))
+      .sort((a, b) => b.score - a.score)
       .slice(0, 5);
 
-    const finalScholarships = scoredScholarships
-      .filter((item) => item.score >= 50)
+    const finalScholarships = eligibleScholarships
+      .map((item) => calculateScore(profile, item))
+      .sort((a, b) => b.score - a.score)
       .slice(0, 5);
 
-    // 7. AI Prompt
-    const prompt = `
+    console.log("\n========== FINAL SCHEMES ==========");
+
+    finalSchemes.forEach((x) => {
+      console.log(`${x.name} (${x.score}%)`);
+    });
+
+    console.log("\n========== FINAL SCHOLARSHIPS ==========");
+
+    finalScholarships.forEach((x) => {
+      console.log(`${x.name} (${x.score}%)`);
+    });
+
+    // ======================================
+    // AI RESPONSE
+    // ======================================
+
+    let reply = "";
+
+    if (finalSchemes.length === 0 && finalScholarships.length === 0) {
+      reply =
+        "Sorry! No matching schemes or scholarships were found for your profile.";
+    } else {
+      try {
+        const prompt = `
 You are SchemeSathi AI.
 
-You are an intelligent Government Scheme Recommendation Assistant.
+Your job is to recommend ONLY the schemes and scholarships provided below.
 
-User Profile:
-${JSON.stringify(profile, null, 2)}
+Never invent any scheme.
 
-Government Schemes:
-${JSON.stringify(scoredSchemes, null, 2)}
+Never invent any scholarship.
 
-Scholarships:
-${JSON.stringify(scoredScholarships, null, 2)}
+Explain naturally like ChatGPT.
 
-IMPORTANT RULES
+----------------------------------
 
-1. Recommend ONLY from the database below.
-2. Never invent any Government Scheme.
-3. Never invent any Scholarship.
-4. Never generate any website.
-5. If nothing matches, say "No matching scheme found."
-6. Explain only the provided schemes.
-7. Do not modify scheme names.
+USER PROFILE
 
-You are SchemeSathi AI.
-User Query:
+Age : ${profile.age}
+
+Gender : ${profile.gender}
+
+State : ${profile.state}
+
+Category : ${profile.category}
+
+Occupation : ${profile.occupation}
+
+Education : ${profile.education}
+
+Course : ${profile.course}
+
+Income : ₹${profile.income}
+
+----------------------------------
+
+Government Schemes
+
+${JSON.stringify(finalSchemes, null, 2)}
+
+----------------------------------
+
+Scholarships
+
+${JSON.stringify(finalScholarships, null, 2)}
+
+----------------------------------
+
+Instructions
+
+1. Introduce briefly.
+
+2. Explain why the user matches.
+
+3. Mention best scholarship first.
+
+4. Mention best schemes afterwards.
+
+5. Mention benefits.
+
+6. Mention official website if available.
+
+7. Do NOT invent anything.
+
+8. Friendly English.
+
+9. Use bullet points.
+
+10. End with wishing good luck.
+
+User Question
+
 ${message}
 `;
 
-    // 8. AI Response
-    const reply = await askGemma(prompt);
+        reply = await askGemma(prompt);
 
-    // 9. Return Response
-    res.json({
-      success: true,
-      profile,
-      reply,
-      schemes: scoredSchemes,
-      scholarships: scoredScholarships,
-    });
+        if (!reply || reply.trim() === "") {
+          reply = generateResponse(profile, finalSchemes, finalScholarships);
+        }
+      } catch (err) {
+        console.log("\n========== AI FAILED ==========");
+        console.log(err.message);
 
-    res.json({
+        reply = generateResponse(profile, finalSchemes, finalScholarships);
+      }
+    }
+
+    console.log("\n========== FINAL REPLY ==========");
+    console.log(reply);
+
+    return res.json({
       success: true,
       profile,
       reply,
@@ -93,9 +193,9 @@ ${message}
   } catch (err) {
     console.error(err);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "AI Error",
+      message: "Internal Server Error",
     });
   }
 });

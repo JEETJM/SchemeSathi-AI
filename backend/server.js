@@ -3,13 +3,13 @@
 // import dotenv from "dotenv";
 import dotenv from "dotenv";
 dotenv.config();
-
+// console.log(process.env.GEMMA_API_KEY);
 import express from "express";
 import cors from "cors";
 // dotenv.config();
 // console.log("ENV TEST:", process.env.CLOUD_NAME);
 // console.log("Current Directory:", process.cwd());
-
+// import savedRoute from "./routes/saved.js";
 import authRoute from "./routes/auth.js";
 import dashboardRoute from "./routes/dashboard.js";
 import recommendationRoute from "./routes/recommendation.js";
@@ -25,11 +25,22 @@ connectDB();
 // Middlewares
 app.use(cors());
 app.use(express.json());
-app.use("/api/dashboard", dashboardRoute);
-app.use("/api/recommendations", recommendationRoute);
+
+
+
+app.use((req, res, next) => {
+  console.log(req.method, req.url);
+  next();
+});
+
+
 // Routes
 app.use("/api/chat", chatRoute);
 app.use("/api/auth", authRoute);
+app.use("/api/dashboard", dashboardRoute);
+app.use("/api/recommendations", recommendationRoute);
+// app.use("/api/saved", savedRoute);
+
 // Test Route
 app.get("/", (req, res) => {
   res.send("🚀 SchemeSathi AI Backend Running...");

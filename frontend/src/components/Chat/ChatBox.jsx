@@ -13,6 +13,7 @@ function ChatBox() {
   const [chatHistory, setChatHistory] = useState([]);
 
   const sendMessage = async () => {
+    // console.log(res.data);
     if (!message.trim()) return;
 
     setLoading(true);

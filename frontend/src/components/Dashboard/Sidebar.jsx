@@ -1,5 +1,6 @@
 import "./Sidebar.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+// import { House } from "lucide-react";
 import {
   House,
   LayoutDashboard,
@@ -18,47 +19,53 @@ function Sidebar() {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+
     navigate("/");
   };
 
   const menu = [
     {
       title: "Home",
-      icon: <House size={19} />,
       path: "/",
+      icon: <House size={18} />,
     },
+
     {
       title: "Dashboard",
-      icon: <LayoutDashboard size={19} />,
       path: "/dashboard",
+      icon: <LayoutDashboard size={18} />,
     },
+
     {
       title: "AI Chat",
-      icon: <Bot size={19} />,
       path: "/chat",
+      icon: <Bot size={18} />,
     },
+
     {
       title: "Profile",
-      icon: <User size={19} />,
-      path: "/dashboard/profile",
+      path: "/profile",
+      icon: <User size={18} />,
     },
+
     {
       title: "Saved Schemes",
-      icon: <Heart size={19} />,
-      path: "/dashboard/saved",
+      path: "/saved",
+      icon: <Heart size={18} />,
     },
+
     {
       title: "Notifications",
-      icon: <Bell size={19} />,
-      path: "/dashboard/notifications",
+      path: "/notifications",
+      icon: <Bell size={18} />,
     },
+
     {
       title: "Settings",
-      icon: <Settings size={19} />,
-      path: "/dashboard/settings",
+      path: "/settings",
+      icon: <Settings size={18} />,
     },
   ];
-
   return (
     <aside className="sidebar">
       <div>

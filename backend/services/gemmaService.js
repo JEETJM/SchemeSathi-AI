@@ -1,22 +1,35 @@
 import "dotenv/config";
-import { GoogleGenAI } from "@google/genai";
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMMA_API_KEY,
-});
+import axios from "axios";
 
 export async function askGemma(prompt) {
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: prompt,
-    });
+    const response = await axios.post(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        model: "deepseek/deepseek-r1-0528:free",
+        messages: [
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
 
-    console.log(response);
-
-    return response.text;
+    return response.data.choices[0].message.content;
   } catch (err) {
-    console.log(JSON.stringify(err, null, 2));
+    console.log("========== OPENROUTER ERROR ==========");
+    console.log(err.response?.data || err.message);
+
+    // ❌ return "AI service temporarily unavailable.";
+
+    // ✅ এটা দাও
     throw err;
   }
 }

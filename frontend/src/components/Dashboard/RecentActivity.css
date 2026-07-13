@@ -1,0 +1,35 @@
+.recentActivity {
+  margin-top: 30px;
+  background: white;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.recentActivity h3 {
+  margin-bottom: 20px;
+}
+
+.activityItem {
+  padding: 18px;
+  border-bottom: 1px solid #eee;
+}
+
+.activityItem:last-child {
+  border-bottom: none;
+}
+
+.activityItem h4 {
+  margin-bottom: 6px;
+}
+
+.activityItem p {
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.emptyActivity {
+  text-align: center;
+  padding: 40px;
+  color: #777;
+}

@@ -1,10 +1,22 @@
 import "./RecentActivity.css";
 
-function RecentActivity() {
+function RecentActivity({ activity = [] }) {
   return (
-    <div className="card shadow p-4 mt-4">
-      <h4>Recent Activity</h4>
-      <p>No recent activity.</p>
+    <div className="recentActivity">
+      <h3>Recent Activity</h3>
+
+      {activity.length === 0 ?
+        <div className="emptyActivity">No recent activity.</div>
+      : activity.map((item, index) => (
+          <div key={index} className="activityItem">
+            <h4>{item.title}</h4>
+
+            <p>{item.description}</p>
+
+            <small>{item.date}</small>
+          </div>
+        ))
+      }
     </div>
   );
 }

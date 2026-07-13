@@ -1,55 +1,83 @@
 import "./Topbar.css";
-import { Bell, Search } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Search, Bell, ChevronDown, House, User, LogOut } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 function Topbar() {
-  const user = JSON.parse(localStorage.getItem("user")) || {};
+  const navigate = useNavigate();
 
-  const today = new Date().toLocaleDateString("en-IN", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  const { user, logout } = useAuth();
+
+  const [open, setOpen] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
-    <header className="topbar">
-      <div>
+    <div className="topbar">
+      <div className="topbarLeft">
         <h2>Welcome 👋</h2>
 
-        <p>{today}</p>
+        <p>
+          {new Date().toLocaleDateString("en-IN", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </p>
       </div>
 
       <div className="topbarRight">
         <div className="searchBox">
           <Search size={18} />
 
-          <input type="text" placeholder="Search schemes..." />
+          <input placeholder="Search schemes..." />
         </div>
 
-        <button className="notificationBtn">
-          <Bell size={20} />
-
-          <span>3</span>
+        <button className="bellBtn">
+          <Bell size={21} />
         </button>
 
-        <div className="profileMini">
+        <div className="profileMenu" onClick={() => setOpen(!open)}>
           <img
             src={
-              user.profileImage ||
-              "https://ui-avatars.com/api/?name=" +
-                encodeURIComponent(user.fullName || "User")
+              user?.profileImage ||
+              `https://ui-avatars.com/api/?background=2563eb&color=fff&name=${encodeURIComponent(
+                user?.fullName || "User",
+              )}`
             }
             alt=""
           />
 
-          <div>
-            <h4>{user.fullName || "User"}</h4>
+          <span>{user?.fullName || "User"}</span>
 
-            <p>{user.email}</p>
-          </div>
+          <ChevronDown size={18} />
+
+          {open && (
+            <div className="dropdown">
+              <button onClick={() => navigate("/profile")}>
+                <User size={18} />
+                Profile
+              </button>
+
+              <button onClick={() => navigate("/")}>
+                <House size={18} />
+                Home
+              </button>
+
+              <button onClick={handleLogout}>
+                <LogOut size={18} />
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </div>
-    </header>
+    </div>
   );
 }
 

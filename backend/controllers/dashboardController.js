@@ -1,24 +1,77 @@
 import User from "../models/User.js";
 import Scheme from "../models/Scheme.js";
 import Scholarship from "../models/Scholarship.js";
-import SavedScheme from "../models/SavedScheme.js";
-import ChatHistory from "../models/ChatHistory.js";
+
+// =======================================
+// Calculate Profile Score
+// =======================================
+
+const calculateProfileScore = (user) => {
+  const fields = [
+    "fullName",
+    "email",
+    "phone",
+    "age",
+    "gender",
+    "state",
+    "district",
+    "category",
+    "occupation",
+    "education",
+    "course",
+    "annualIncome",
+    "profileImage",
+  ];
+
+  let completed = 0;
+
+  fields.forEach((field) => {
+    const value = user[field];
+
+    if (value !== undefined && value !== null && value !== "" && value !== 0) {
+      completed++;
+    }
+  });
+
+  return Math.round((completed / fields.length) * 100);
+};
+
+// =======================================
+// Dashboard
+// =======================================
 
 export const getDashboard = async (req, res) => {
   try {
-    const totalSchemes = await Scheme.countDocuments();
+    const user = await User.findById(req.user._id).select("-password");
 
-    const totalScholarships = await Scholarship.countDocuments();
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
-    const saved = await SavedScheme.countDocuments({
-      user: req.user._id,
+    // Total Schemes
+    const totalSchemes = await Scheme.countDocuments({
+      status: "Active",
     });
 
-    const chats = await ChatHistory.countDocuments({
-      user: req.user._id,
+    // Total Scholarships
+    const totalScholarships = await Scholarship.countDocuments({
+      status: "Active",
     });
 
-    const profile = await User.findById(req.user._id);
+    // Profile Completion
+    const profileScore = calculateProfileScore(user);
+
+    // Save into database
+    user.profileScore = profileScore;
+
+    await user.save();
+
+    // Temporary values
+    const saved = 0;
+    const activity = [];
 
     res.json({
       success: true,
@@ -27,11 +80,12 @@ export const getDashboard = async (req, res) => {
         totalSchemes,
         totalScholarships,
         saved,
-        chats,
-        profileScore: profile.profileScore,
+        profileScore,
       },
 
-      user: profile,
+      user,
+
+      activity,
     });
   } catch (err) {
     console.log(err);

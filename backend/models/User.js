@@ -46,7 +46,22 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
+    category: {
+      type: String,
+      default: "",
+    },
+
     occupation: {
+      type: String,
+      default: "",
+    },
+
+    education: {
+      type: String,
+      default: "",
+    },
+
+    course: {
       type: String,
       default: "",
     },
@@ -56,7 +71,7 @@ const userSchema = new mongoose.Schema(
       default: 0,
     },
 
-    education: {
+    profileImage: {
       type: String,
       default: "",
     },

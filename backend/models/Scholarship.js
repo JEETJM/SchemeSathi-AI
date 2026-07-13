@@ -2,21 +2,38 @@ import mongoose from "mongoose";
 
 const scholarshipSchema = new mongoose.Schema(
   {
+    // =========================
+    // BASIC
+    // =========================
+
     name: {
       type: String,
       required: true,
+      trim: true,
     },
 
-    provider: String,
+    provider: {
+      type: String,
+      default: "",
+    },
 
     status: {
       type: String,
-      default: "active",
+      default: "Active",
     },
+
+    // =========================
+    // ELIGIBILITY
+    // =========================
 
     state: {
       type: String,
       default: "All India",
+    },
+
+    district: {
+      type: String,
+      default: "",
     },
 
     gender: {
@@ -24,15 +41,23 @@ const scholarshipSchema = new mongoose.Schema(
       default: "Any",
     },
 
-    category: [String],
-
-    education: [String],
-
-    course: [String],
-
     occupation: {
       type: String,
       default: "Student",
+    },
+    category: {
+      type: [String],
+      default: [],
+    },
+
+    education: {
+      type: [String],
+      default: [],
+    },
+
+    course: {
+      type: [String],
+      default: [],
     },
 
     incomeLimit: {
@@ -40,19 +65,54 @@ const scholarshipSchema = new mongoose.Schema(
       default: 0,
     },
 
-    ageMin: Number,
+    ageMin: {
+      type: Number,
+      default: 0,
+    },
 
-    ageMax: Number,
+    ageMax: {
+      type: Number,
+      default: 100,
+    },
 
-    eligibility: String,
+    // =========================
+    // DETAILS
+    // =========================
 
-    benefits: String,
+    eligibility: {
+      type: String,
+      default: "",
+    },
 
-    documents: [String],
+    benefits: {
+      type: String,
+      default: "",
+    },
 
-    officialLink: String,
+    documents: {
+      type: [String],
+      default: [],
+    },
 
-    keywords: [String],
+    officialLink: {
+      type: String,
+      default: "",
+    },
+
+    applyStart: {
+      type: String,
+      default: "",
+    },
+
+    applyEnd: {
+      type: String,
+      default: "",
+    },
+
+    keywords: {
+      type: [String],
+      default: [],
+    },
   },
   {
     timestamps: true,

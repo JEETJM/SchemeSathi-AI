@@ -5,13 +5,16 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ChatPage from "./pages/ChatPage";
+// import Profile from "./pages/Profile";
+// import Admin from "./pages/Admin";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
     <Routes>
-      {/* Public */}
+      {/* Public Routes */}
+
       <Route path="/" element={<Home />} />
 
       <Route path="/login" element={<Login />} />
@@ -19,6 +22,7 @@ function App() {
       <Route path="/register" element={<Register />} />
 
       {/* Protected */}
+
       <Route
         path="/dashboard"
         element={
@@ -36,6 +40,51 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      {/* <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      /> */}
+
+      <Route
+        path="/saved"
+        element={
+          <ProtectedRoute>
+            <h2 style={{ padding: 40 }}>Saved Schemes (Coming Soon)</h2>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/notifications"
+        element={
+          <ProtectedRoute>
+            <h2 style={{ padding: 40 }}>Notifications</h2>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <h2 style={{ padding: 40 }}>Settings</h2>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <Admin />
+          </ProtectedRoute>
+        }
+      /> */}
     </Routes>
   );
 }

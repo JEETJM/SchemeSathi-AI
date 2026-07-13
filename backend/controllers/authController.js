@@ -3,7 +3,11 @@ import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
 import cloudinary from "../config/cloudinary.js";
 import streamifier from "streamifier";
+
+// =====================================================
 // REGISTER
+// =====================================================
+
 export const register = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
@@ -17,12 +21,12 @@ export const register = async (req, res) => {
       });
     }
 
-    const hashed = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
       fullName,
       email,
-      password: hashed,
+      password: hashedPassword,
     });
 
     res.status(201).json({
@@ -40,7 +44,10 @@ export const register = async (req, res) => {
   }
 };
 
+// =====================================================
 // LOGIN
+// =====================================================
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -78,30 +85,54 @@ export const login = async (req, res) => {
   }
 };
 
-// PROFILE
+// =====================================================
+// GET PROFILE
+// =====================================================
+
 export const getProfile = async (req, res) => {
   res.json(req.user);
 };
 
+// =====================================================
 // UPDATE PROFILE
+// =====================================================
+
 export const updateProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
 
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.fullName = req.body.fullName ?? user.fullName;
+    user.phone = req.body.phone ?? user.phone;
+
     user.age = req.body.age ?? user.age;
     user.gender = req.body.gender ?? user.gender;
+
     user.state = req.body.state ?? user.state;
     user.district = req.body.district ?? user.district;
+
     user.category = req.body.category ?? user.category;
-    user.income = req.body.income ?? user.income;
+
     user.occupation = req.body.occupation ?? user.occupation;
+
     user.education = req.body.education ?? user.education;
-    user.phone = req.body.phone ?? user.phone;
+
+    user.course = req.body.course ?? user.course;
+
+    user.annualIncome =
+      req.body.annualIncome ?? req.body.income ?? user.annualIncome;
 
     await user.save();
 
     res.json({
       success: true,
+      message: "Profile Updated Successfully",
       user,
     });
   } catch (err) {
@@ -114,12 +145,16 @@ export const updateProfile = async (req, res) => {
   }
 };
 
+// =====================================================
+// PROFILE IMAGE
+// =====================================================
+
 export const uploadProfileImage = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({
         success: false,
-        message: "No image selected",
+        message: "Please select an image",
       });
     }
 
@@ -143,7 +178,9 @@ export const uploadProfileImage = async (req, res) => {
 
         res.json({
           success: true,
+          message: "Profile image uploaded successfully",
           image: result.secure_url,
+          user,
         });
       },
     );

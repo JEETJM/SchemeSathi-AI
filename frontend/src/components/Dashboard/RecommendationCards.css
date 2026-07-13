@@ -1,46 +1,137 @@
 .recommendationCard {
-  background: white;
+  margin-top: 35px;
+  background: #fff;
   padding: 25px;
   border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-.recommendItem {
-  padding: 18px 0;
-  border-bottom: 1px solid #eee;
+.recommendationCard h3 {
+  margin-bottom: 25px;
 }
 
-.recommendItem:last-child {
-  border-bottom: none;
-}
-
-.recommendItem h4 {
-  margin-bottom: 6px;
-}
-
-.recommendItem p {
-  color: #666;
-  font-size: 14px;
-}
-
-.recommendFooter {
-  margin-top: 12px;
+.schemeCard {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 20px;
+  border: 1px solid #ececec;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  transition: 0.3s;
 }
 
-.score {
-  background: #dbeafe;
-  color: #2563eb;
+.schemeCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.schemeCard h4 {
+  margin-bottom: 8px;
+}
+
+.schemeCard p {
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.matchBadge {
+  background: #22c55e;
+  color: #fff;
   padding: 6px 12px;
-  border-radius: 30px;
+  border-radius: 8px;
   font-size: 14px;
+}
+
+.applyBtn {
+  padding: 10px 18px;
+  background: #2563eb;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
   font-weight: 600;
 }
 
-.recommendFooter a {
-  text-decoration: none;
+.applyBtn:hover {
+  background: #1d4ed8;
+}
+
+.emptyCard {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.recommendationCard {
+  background: white;
+
+  padding: 28px;
+
+  border-radius: 22px;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.schemeCard {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 25px;
+
+  margin-top: 18px;
+
+  border: 1px solid #ececec;
+
+  border-radius: 18px;
+}
+
+.schemeCard h4 {
+  margin-bottom: 10px;
+
+  font-size: 26px;
+}
+
+.schemeCard p {
+  color: #666;
+
+  margin-bottom: 15px;
+}
+
+.matchBadge {
+  background: #22c55e;
+
+  color: white;
+
+  padding: 8px 14px;
+
+  border-radius: 10px;
+
   font-weight: 600;
-  color: #16a34a;
+
+  display: inline-block;
+}
+
+.applyBtn {
+  background: #2563eb;
+
+  color: white;
+
+  padding: 12px 22px;
+
+  border-radius: 10px;
+
+  text-decoration: none;
+
+  font-weight: 600;
+}
+
+.emptyCard {
+  padding: 50px;
+
+  text-align: center;
+
+  color: #666;
 }

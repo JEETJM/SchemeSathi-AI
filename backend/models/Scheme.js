@@ -2,17 +2,34 @@ import mongoose from "mongoose";
 
 const schemeSchema = new mongoose.Schema(
   {
+    // =========================
+    // BASIC
+    // =========================
+
     name: {
       type: String,
       required: true,
+      trim: true,
     },
 
-    schemeType: String,
+    ministry: {
+      type: String,
+      default: "",
+    },
+
+    schemeType: {
+      type: String,
+      default: "",
+    },
 
     status: {
       type: String,
-      default: "active",
+      default: "Active",
     },
+
+    // =========================
+    // ELIGIBILITY
+    // =========================
 
     state: {
       type: String,
@@ -34,30 +51,73 @@ const schemeSchema = new mongoose.Schema(
       default: "Any",
     },
 
-    category: [String],
+   category: {
+  type: [String],
+  default: [],
+},
 
-    education: [String],
+    education: {
+  type: [String],
+  default: [],
+},
+    course: {
+  type: [String],
+  default: [],
+},
 
     incomeLimit: {
       type: Number,
       default: 0,
     },
 
-    ageMin: Number,
+    ageMin: {
+      type: Number,
+      default: 0,
+    },
 
-    ageMax: Number,
+    ageMax: {
+      type: Number,
+      default: 100,
+    },
 
-    description: String,
+    // =========================
+    // DETAILS
+    // =========================
 
-    eligibility: String,
+    description: {
+      type: String,
+      default: "",
+    },
 
-    benefits: String,
+    eligibility: {
+      type: String,
+      default: "",
+    },
 
-    documents: [String],
+    benefits: {
+      type: String,
+      default: "",
+    },
 
-    officialLink: String,
+    documents: {
+      type: [String],
+      default: [],
+    },
 
-    keywords: [String],
+    officialLink: {
+      type: String,
+      default: "",
+    },
+
+    applicationMode: {
+      type: String,
+      default: "Online",
+    },
+
+    keywords: {
+      type: [String],
+      default: [],
+    },
   },
   {
     timestamps: true,
