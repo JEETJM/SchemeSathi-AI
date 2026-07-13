@@ -3,9 +3,17 @@ import ReactMarkdown from "react-markdown";
 
 function ChatMessage({ sender, text }) {
   return (
-    <div className={`message ${sender}`}>
-      <div className="bubble">
-        <ReactMarkdown>{text}</ReactMarkdown>
+    <div className={`chat-message ${sender}`}>
+      <div className="chat-bubble">
+        <ReactMarkdown
+          components={{
+            a: ({ node, ...props }) => (
+              <a {...props} target="_blank" rel="noopener noreferrer" />
+            ),
+          }}
+        >
+          {text}
+        </ReactMarkdown>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import express from "express";
+import crypto from "crypto";
 
 import { askGemma } from "../services/gemmaService.js";
 import { universalSearch } from "../services/universalSearch.js";
@@ -7,11 +8,19 @@ import { calculateScore } from "../services/scoreService.js";
 import { extractProfile } from "../services/profileExtractor.js";
 import { generateResponse } from "../services/responseGenerator.js";
 
+import {
+  saveUserMessage,
+  saveAIMessage,
+  buildConversation,
+} from "../services/chatMemory.js";
+
 const router = express.Router();
 
 router.post("/", async (req, res) => {
   try {
-    const { message } = req.body;
+    const { message, sessionId } = req.body;
+
+    const chatSession = sessionId || crypto.randomUUID();
 
     if (!message || !message.trim()) {
       return res.status(400).json({
@@ -32,6 +41,12 @@ router.post("/", async (req, res) => {
 
     console.log("\nPROFILE");
     console.log(profile);
+
+    // ======================================
+    // SAVE USER MESSAGE
+    // ======================================
+
+    await saveUserMessage(chatSession, message, profile);
 
     // ======================================
     // SEARCH DATABASE
@@ -85,6 +100,12 @@ router.post("/", async (req, res) => {
     });
 
     // ======================================
+    // PREVIOUS CHAT HISTORY
+    // ======================================
+
+    const history = await buildConversation(chatSession);
+
+    // ======================================
     // AI RESPONSE
     // ======================================
 
@@ -98,71 +119,71 @@ router.post("/", async (req, res) => {
         const prompt = `
 You are SchemeSathi AI.
 
-Your job is to recommend ONLY the schemes and scholarships provided below.
+You are an intelligent AI assistant for Indian Government Schemes and Scholarships.
 
-Never invent any scheme.
+Your job is to answer naturally like ChatGPT.
 
-Never invent any scholarship.
+================================================
 
-Explain naturally like ChatGPT.
+PREVIOUS CONVERSATION
 
-----------------------------------
+${history}
 
-USER PROFILE
+================================================
 
-Age : ${profile.age}
+CURRENT USER PROFILE
 
-Gender : ${profile.gender}
+${JSON.stringify(profile, null, 2)}
 
-State : ${profile.state}
+================================================
 
-Category : ${profile.category}
-
-Occupation : ${profile.occupation}
-
-Education : ${profile.education}
-
-Course : ${profile.course}
-
-Income : ₹${profile.income}
-
-----------------------------------
-
-Government Schemes
+ELIGIBLE GOVERNMENT SCHEMES
 
 ${JSON.stringify(finalSchemes, null, 2)}
 
-----------------------------------
+================================================
 
-Scholarships
+ELIGIBLE SCHOLARSHIPS
 
 ${JSON.stringify(finalScholarships, null, 2)}
 
-----------------------------------
+================================================
 
-Instructions
+IMPORTANT RULES
 
-1. Introduce briefly.
+1. Recommend ONLY from the database.
 
-2. Explain why the user matches.
+2. Never invent schemes.
 
-3. Mention best scholarship first.
+3. Never invent scholarships.
 
-4. Mention best schemes afterwards.
+4. Remember previous conversation.
 
-5. Mention benefits.
+5. Answer naturally like ChatGPT.
 
-6. Mention official website if available.
+6. Explain WHY every recommendation matches.
 
-7. Do NOT invent anything.
+7. Mention Benefits.
 
-8. Friendly English.
+8. Mention Eligibility.
 
-9. Use bullet points.
+9. Mention Official Website.
 
-10. End with wishing good luck.
+10. Use headings.
 
-User Question
+11. Use bullet points.
+
+12. Keep response friendly.
+
+13. Mention the BEST scholarship first.
+
+14. Then recommend schemes.
+
+15. End with a helpful suggestion.
+
+================================================
+
+CURRENT USER QUESTION
 
 ${message}
 `;
@@ -180,11 +201,18 @@ ${message}
       }
     }
 
+    // ======================================
+    // SAVE AI MESSAGE
+    // ======================================
+
+    await saveAIMessage(chatSession, reply);
+
     console.log("\n========== FINAL REPLY ==========");
     console.log(reply);
 
     return res.json({
       success: true,
+      sessionId: chatSession,
       profile,
       reply,
       schemes: finalSchemes,
